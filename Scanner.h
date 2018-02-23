@@ -18,16 +18,15 @@ struct SensDat2 {
     int data2;
 };
 
-float error(int data1, int data2, int data3, int data4);
+float error(int left1, int left, int right, int right1);
 
 float error(int data1, int data2);
 
 class Scanner {
 private:
     float emptyLim;
-    float powerLim;
-    float lightLim;
-    float sideLim;
+    float rotateLim;
+    float zeroLim;
 
     Pid distPid;
     Pid light1Pid;

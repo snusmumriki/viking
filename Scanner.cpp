@@ -5,8 +5,8 @@
 #include <cmath>
 #include "Scanner.h"
 
-float error(int data1, int data2, int data3, int data4) {
-    return (float) (data1 * -3 + data2 * -1 + data3 * 1 + data4 * 3) / (float) ((data1 + data2 + data3 + data4) * 3);
+float error(int left1, int left, int right, int right1) {
+    return (float) (left1 * -3 + left * -1 + right * 1 + right1 * 3) / (float) ((left1 + left + right + right1) * 3);
 }
 
 float error(int data1, int data2) {
@@ -14,9 +14,9 @@ float error(int data1, int data2) {
 }
 
 float Scanner::output(struct SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt) {
-    float err1 = light1Pid.power(error(lightData->data1, lightData->data4), dt);
-    float err2 = light2Pid.power(error(lightData->data2, lightData->data3), dt);
-    if (fabsf(err1) > lightLim || fabsf(err2) > lightLim) {
+    float err1 = light1Pid.power(error(lightData->data1, lightData->data2), dt);
+    float err2 = light2Pid.power(error(lightData->data3, lightData->data4), dt);
+    if (fabsf(err1) > zeroLim || fabsf(err2) > zeroLim) {
         if (fabsf(err1) > fabsf(err2))
             return copysignf(2.0, err1);
         else return copysignf(3.0, err2);
@@ -27,12 +27,12 @@ float Scanner::output(struct SensDat4 *distData, SensDat2 *sideData, SensDat4 *l
     float output;
     if ((fabsf(err1) + fabsf(err2)) / 2.f > emptyLim) {
         output = distPid.power(error(distData->data1, distData->data2, distData->data3, distData->data4), dt);
-        if (fabsf(output) > powerLim)
+        if (fabsf(output) > rotateLim)
             return (int) copysignf(1.0, output);
         else return 0;
     } else {
-        output = distPid.power(fabsf(error(sideData->data1, sideData->data2)) > sideLim, dt);
-        if (fabsf(output) > lightLim)
+        output = distPid.power(fabsf(error(sideData->data1, sideData->data2)) > zeroLim, dt);
+        if (fabsf(output) > zeroLim)
             return (int) copysignf(1.0, output);
     }
 
