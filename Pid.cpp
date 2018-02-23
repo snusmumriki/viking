@@ -44,7 +44,7 @@ float Pid::integral(float err, float dt) {
 }
 
 float Pid::power(float err, float dt) {
-    float pwr = prop(err) + diff(err, dt) + integral(err, dt);
+    float pwr = sErr + prop(err) + diff(err, dt) + integral(err, dt);
     err0 = err;
     return pwr;
 }

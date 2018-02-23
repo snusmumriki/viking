@@ -16,7 +16,6 @@ float error(int data1, int data2) {
 float Scanner::output(struct SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt) {
     float err1 = light1Pid.power(error(lightData->data1, lightData->data4), dt);
     float err2 = light2Pid.power(error(lightData->data2, lightData->data3), dt);
-
     if (fabsf(err1) > lightLim || fabsf(err2) > lightLim) {
         if (fabsf(err1) > fabsf(err2))
             return copysignf(2.0, err1);
@@ -31,11 +30,11 @@ float Scanner::output(struct SensDat4 *distData, SensDat2 *sideData, SensDat4 *l
         if (fabsf(output) > powerLim)
             return (int) copysignf(1.0, output);
         else return 0;
+    } else {
+        output = distPid.power(fabsf(error(sideData->data1, sideData->data2)) > sideLim, dt);
+        if (fabsf(output) > lightLim)
+            return (int) copysignf(1.0, output);
     }
-
-    output = distPid.power(fabsf(error(sideData->data1, sideData->data2)) > sideLim, dt);
-    if (fabsf(output) > lightLim)
-        return (int) copysignf(1.0, output);
 
     return distPid.feedback(dt);
 }
