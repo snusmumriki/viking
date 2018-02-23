@@ -4,11 +4,14 @@
 
 #include "Pid.h"
 
-Pid::Pid(float kp, float ki, float kd) {
-    Pid::kp = kp;
-    Pid::ki = ki;
-    Pid::kd = kd;
+float normalize(float x) {
+    if (x > 1.f)
+        return 1.f;
+    if (x < -1.f)
+        return -1.f;
 }
+
+Pid::Pid(float kp, float ki, float kd) : kp(kp), ki(ki), kd(kd) {}
 
 void Pid::setKp(float kp) {
     Pid::kp = kp;
@@ -22,30 +25,30 @@ void Pid::setKd(float kd) {
     Pid::kd = kd;
 }
 
-float Pid::prop(float error) {
-    return kp * error;
+void Pid::setSErr(float sErr) {
+    Pid::sErr = sErr;
 }
 
-float Pid::diff(float error, float dt) {
-    float d = kd * (error - error0) / dt;
-    if (d > 1.f)
-        d = 1.f;
-    if (d < -1.f)
-        d = -1.f;
-    return d;
+float Pid::prop(float err) {
+    return kp * err;
 }
 
-float Pid::integral(float error, float dt) {
-    float i = ki * (error + error0) / 2.f * dt;
-    if (i > 1.f)
-        i = 1.f;
-    if (i < -1.f)
-        i = -1.f;
-    return i;
+float Pid::diff(float err, float dt) {
+    float d = kd * (err - err0) / dt;
+    return normalize(d);
 }
 
-float Pid::output(float error, float dt) {
-    float pwr = prop(error) + diff(error, dt) + integral(error, dt);
-    error0 = error;
+float Pid::integral(float err, float dt) {
+    i = ki * (err + err0) / 2.f * dt;
+    return normalize(i);
+}
+
+float Pid::power(float err, float dt) {
+    float pwr = prop(err) + diff(err, dt) + integral(err, dt);
+    err0 = err;
     return pwr;
+}
+
+float Pid::feedback(float dt) {
+    return normalize(power(i, dt));
 }

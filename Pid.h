@@ -5,6 +5,7 @@
 #ifndef VIKING_PID_H
 #define VIKING_PID_H
 
+float normalize(float x);
 
 class Pid {
 public:
@@ -16,20 +17,26 @@ public:
 
     void setKd(float kd);
 
+    void setSErr(float sErr);
+
     float prop(float err);
 
-    float diff(float err, float t);
+    float diff(float err, float dt);
 
-    float integral(float err, float t);
+    float integral(float err, float dt);
 
-    float output(float err, float t);
+    float power(float err, float dt);
+
+    float feedback(float dt);
 
 private:
     float kp;
     float ki;
     float kd;
+    float sErr;
 
-    float error0 = 0;
+    float err0 = 0.f;
+    float i = 0.f;
 };
 
 
