@@ -28,15 +28,16 @@ class Controller {
 private:
     float emptyLim;
     float rotateLim;
-    float zeroLim;
+    float lightLim;
+    float sideLim;
 
     Pid distPid;
     Pid light1Pid;
     Pid light2Pid;
 
 public:
-    Controller(float emptyLim, float rotateLim, float zeroLim, const Pid &distPid, const Pid &light1Pid,
-               const Pid &light2Pid);
+    Controller(float emptyLim, float rotateLim, float lightLim, float sideLim,
+               const Pid &distPid, const Pid &light1Pid, const Pid &light2Pid);
 
     int getCommand(SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt);
 

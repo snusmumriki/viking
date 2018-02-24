@@ -17,33 +17,33 @@ int sgn(float x, float lim) {
     return (x > lim) - (x < -lim);
 }
 
-Controller::Controller(float emptyLim, float rotateLim, float zeroLim, const Pid &distPid, const Pid &light1Pid,
-                       const Pid &light2Pid) : emptyLim(emptyLim), rotateLim(rotateLim), zeroLim(zeroLim),
-                                               distPid(distPid), light1Pid(light1Pid), light2Pid(light2Pid) {}
+Controller::Controller(float emptyLim, float rotateLim, float lightLim, float sideLim,
+                       const Pid &distPid, const Pid &light1Pid, const Pid &light2Pid) :
+        emptyLim(emptyLim), rotateLim(rotateLim), lightLim(lightLim), sideLim(sideLim),
+        distPid(distPid), light1Pid(light1Pid), light2Pid(light2Pid) {}
 
 int Controller::bound(SensDat4 *lightData, float dt) {
     float err1 = light1Pid.output(error(lightData->data1, lightData->data2), dt);
     float err2 = light2Pid.output(error(lightData->data3, lightData->data4), dt);
-    if (err1 > err2)return sgn(err1, zeroLim) * 2;
-    else return sgn(err2, zeroLim) * 3;
+    if (err1 > err2) return sgn(err1, lightLim) * 2;
+    else return sgn(err2, lightLim) * 3;
 }
 
-int Controller::distance(SensDat4 *distData,  SensDat2 *sideData, float dt) {
+int Controller::distance(SensDat4 *distData, SensDat2 *sideData, float dt) {
     float err1 = error(distData->data1, distData->data3);
     float err2 = error(distData->data2, distData->data4);
-    if (fabsf(err1) + fabsf(err2) / 2.f > emptyLim) {
+    if ((fabsf(err1) + fabsf(err2)) / 2.f > emptyLim) {
         float output = distPid.output(error(distData->data1, distData->data2, distData->data3, distData->data4), dt);
         return sgn(output, rotateLim);
-    } else return sgn(error(sideData->data1, sideData->data2), zeroLim);
+    } else return sgn(error(sideData->data1, sideData->data2), lightLim);
 }
 
 int Controller::getCommand(SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt) {
-    int num;
-    num = bound(lightData, dt);
+    int num = bound(lightData, dt);
     if (num) return num;
     num = distance(distData, sideData, dt);
     if (num) return num;
-    return sgn(distPid.feedback(dt), zeroLim);
+    return sgn(distPid.feedback(dt), lightLim);
 }
 
 
