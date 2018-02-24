@@ -3,7 +3,7 @@
 //
 
 #include <cmath>
-#include "Scanner.h"
+#include "Controller.h"
 
 float error(int left1, int left, int right, int right1) {
     return (float) (left1 * -3 + left * -1 + right * 1 + right1 * 3) / (float) ((left1 + left + right + right1) * 3);
@@ -13,7 +13,11 @@ float error(int data1, int data2) {
     return (float) (data2 - data1) / (float) (data1 + data2);
 }
 
-float Scanner::output(struct SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt) {
+Controller::Controller(float emptyLim, float rotateLim, float zeroLim, const Pid &distPid, const Pid &light1Pid,
+                       const Pid &light2Pid) : emptyLim(emptyLim), rotateLim(rotateLim), zeroLim(zeroLim),
+                                               distPid(distPid), light1Pid(light1Pid), light2Pid(light2Pid) {}
+
+float Controller::getCommand(struct SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt) {
     float err1 = light1Pid.power(error(lightData->data1, lightData->data2), dt);
     float err2 = light2Pid.power(error(lightData->data3, lightData->data4), dt);
     if (fabsf(err1) > zeroLim || fabsf(err2) > zeroLim) {

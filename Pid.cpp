@@ -11,23 +11,7 @@ float normalize(float x) {
         return -1.f;
 }
 
-Pid::Pid(float kp, float ki, float kd) : kp(kp), ki(ki), kd(kd) {}
-
-void Pid::setKp(float kp) {
-    Pid::kp = kp;
-}
-
-void Pid::setKi(float ki) {
-    Pid::ki = ki;
-}
-
-void Pid::setKd(float kd) {
-    Pid::kd = kd;
-}
-
-void Pid::setSErr(float sErr) {
-    Pid::sErr = sErr;
-}
+Pid::Pid(float kp, float ki, float kd, float sErr) : kp(kp), ki(ki), kd(kd), sErr(sErr) {}
 
 float Pid::prop(float err) {
     return kp * err;

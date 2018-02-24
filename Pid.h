@@ -9,15 +9,7 @@ float normalize(float x);
 
 class Pid {
 public:
-    Pid(float kp, float ki, float kd);
-
-    void setKp(float kp);
-
-    void setKi(float ki);
-
-    void setKd(float kd);
-
-    void setSErr(float sErr);
+    Pid(float kp, float ki, float kd, float sErr);
 
     float prop(float err);
 

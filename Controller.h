@@ -22,7 +22,7 @@ float error(int left1, int left, int right, int right1);
 
 float error(int data1, int data2);
 
-class Scanner {
+class Controller {
 private:
     float emptyLim;
     float rotateLim;
@@ -31,8 +31,12 @@ private:
     Pid distPid;
     Pid light1Pid;
     Pid light2Pid;
+
 public:
-    float output(SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt);
+    Controller(float emptyLim, float rotateLim, float zeroLim, const Pid &distPid, const Pid &light1Pid,
+               const Pid &light2Pid);
+
+    float getCommand(SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt);
 };
 
 #endif //VIKING_SCANNER_H

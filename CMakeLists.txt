@@ -3,4 +3,4 @@ project(viking)
 
 set(CMAKE_CXX_STANDARD 98)
 
-add_executable(viking main.cpp Pid.cpp Pid.h Scanner.cpp Scanner.h Envelop.cpp Envelop.h)
+add_executable(viking main.cpp Pid.cpp Pid.h Controller.cpp Controller.h Envelop.cpp Envelop.h)

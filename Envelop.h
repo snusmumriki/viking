@@ -7,7 +7,19 @@
 
 
 class Envelop {
+private:
+    float accelt;
+    float fixedt;
+    float power;
+    float deccelt;
 
+    float time;
+public:
+    Envelop(float accelt, float fixedt, float power, float deccelt);
+
+    void start();
+
+    float getPower(float dt);
 };
 
 
