@@ -22,6 +22,8 @@ public:
     void start();
 
     float getPower(float dt);
+
+    void stop();
 };
 
 

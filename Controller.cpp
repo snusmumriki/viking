@@ -35,13 +35,19 @@ int Controller::distance(SensDat4 *distData, SensDat2 *sideData, float dt) {
     if ((fabsf(err1) + fabsf(err2)) / 2.f > emptyLim) {
         float output = distPid.output(error(distData->data1, distData->data2, distData->data3, distData->data4), dt);
         return sgn(output, rotateLim);
-    } else return sgn(error(sideData->data1, sideData->data2), lightLim);
+    } else return 2;
+}
+
+int Controller::side(SensDat2 *sideData) {
+    return sgn(error(sideData->data1, sideData->data2), lightLim);
 }
 
 int Controller::getCommand(SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt) {
     int num = bound(lightData, dt);
     if (num) return num;
     num = distance(distData, sideData, dt);
+    if (num != 2) return num;
+    num = side(sideData);
     if (num) return num;
     return sgn(distPid.feedback(dt), lightLim);
 }

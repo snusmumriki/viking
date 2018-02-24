@@ -44,6 +44,8 @@ public:
     int bound(SensDat4 *lightData, float dt);
 
     int distance(SensDat4 *distData, SensDat2 *sideData, float dt);
+
+    int side(SensDat2 *sideData);
 };
 
 #endif //VIKING_SCANNER_H

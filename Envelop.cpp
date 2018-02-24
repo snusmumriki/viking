@@ -12,6 +12,10 @@ void Envelop::start() {
     time = 0.f;
 }
 
+void Envelop::stop() {
+    time = time3;
+}
+
 float Envelop::getPower(float dt) {
     time += dt;
     if (time < time1)
