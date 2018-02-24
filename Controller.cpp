@@ -13,34 +13,32 @@ float error(int data1, int data2) {
     return (float) (data2 - data1) / (float) (data1 + data2);
 }
 
+int sgn(float x, float lim) {
+    return (x > lim) - (x < -lim);
+}
+
 Controller::Controller(float emptyLim, float rotateLim, float zeroLim, const Pid &distPid, const Pid &light1Pid,
                        const Pid &light2Pid) : emptyLim(emptyLim), rotateLim(rotateLim), zeroLim(zeroLim),
                                                distPid(distPid), light1Pid(light1Pid), light2Pid(light2Pid) {}
 
-float Controller::getCommand(struct SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt) {
-    float err1 = light1Pid.power(error(lightData->data1, lightData->data2), dt);
-    float err2 = light2Pid.power(error(lightData->data3, lightData->data4), dt);
-    if (fabsf(err1) > zeroLim || fabsf(err2) > zeroLim) {
-        if (fabsf(err1) > fabsf(err2))
-            return copysignf(2.0, err1);
-        else return copysignf(3.0, err2);
-    }
+int Controller::getCommand(struct SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt) {
+    float err1 = light1Pid.output(error(lightData->data1, lightData->data2), dt);
+    float err2 = light2Pid.output(error(lightData->data3, lightData->data4), dt);
+    int sign = sgn(fmaxf(err1, err2), zeroLim);
+    if (sign) return sign * (2 + (err2 > err1));
 
     err1 = error(distData->data1, distData->data3);
     err2 = error(distData->data2, distData->data4);
-    float output;
-    if ((fabsf(err1) + fabsf(err2)) / 2.f > emptyLim) {
-        output = distPid.power(error(distData->data1, distData->data2, distData->data3, distData->data4), dt);
-        if (fabsf(output) > rotateLim)
-            return (int) copysignf(1.0, output);
-        else return 0;
-    } else {
-        output = distPid.power(fabsf(error(sideData->data1, sideData->data2)) > zeroLim, dt);
-        if (fabsf(output) > zeroLim)
-            return (int) copysignf(1.0, output);
+    if (fabsf(err1) + fabsf(err2) / 2.f > emptyLim) {
+        float output = distPid.output(error(distData->data1, distData->data2, distData->data3, distData->data4), dt);
+        return sgn(output, rotateLim);
     }
 
-    return distPid.feedback(dt);
+    sign = sgn(error(sideData->data1, sideData->data2), rotateLim);
+    if (sign) return sign;
+
+    return sgn(distPid.feedback(dt), zeroLim);
 }
+
 
 

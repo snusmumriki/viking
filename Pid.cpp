@@ -27,12 +27,12 @@ float Pid::integral(float err, float dt) {
     return normalize(i);
 }
 
-float Pid::power(float err, float dt) {
+float Pid::output(float err, float dt) {
     float pwr = sErr + prop(err) + diff(err, dt) + integral(err, dt);
     err0 = err;
     return pwr;
 }
 
 float Pid::feedback(float dt) {
-    return normalize(power(i, dt));
+    return normalize(output(i, dt));
 }

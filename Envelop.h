@@ -8,10 +8,12 @@
 
 class Envelop {
 private:
-    float accelt;
-    float fixedt;
+    float time1;
+    float time2;
+    float time3;
     float power;
-    float deccelt;
+    float ka;
+    float kd;
 
     float time;
 public:

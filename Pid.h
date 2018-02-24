@@ -17,7 +17,7 @@ public:
 
     float integral(float err, float dt);
 
-    float power(float err, float dt);
+    float output(float err, float dt);
 
     float feedback(float dt);
 
