@@ -39,6 +39,10 @@ public:
                const Pid &light2Pid);
 
     int getCommand(SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt);
+
+    int bound(SensDat4 *lightData, float dt);
+
+    int distance(SensDat4 *distData, SensDat2 *sideData, float dt);
 };
 
 #endif //VIKING_SCANNER_H
