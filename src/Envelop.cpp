@@ -13,10 +13,16 @@ void Envelop::start() {
 }
 
 void Envelop::stop() {
-    time = time3;
+    if (time < time1)
+        time = time3 + (power - ka * time) / kd;
+    else time = time3;
 }
 
-float Envelop::getPower(float dt) {
+bool Envelop::isOver() {
+    return time >= time3;
+}
+
+ float Envelop::getPower(float dt) {
     time += dt;
     if (time < time1)
         return time * ka;
@@ -24,5 +30,6 @@ float Envelop::getPower(float dt) {
         return power;
     else if (time < time3)
         return power - time * kd;
-    else return 0;
+    else return 0.0;
 }
+

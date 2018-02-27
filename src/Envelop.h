@@ -7,7 +7,7 @@
 
 
 class Envelop {
-private:
+protected:
     float time1;
     float time2;
     float time3;
@@ -15,15 +15,18 @@ private:
     float ka;
     float kd;
 
-    float time;
+    float time = 0.0;
 public:
     Envelop(float accelt, float fixedt, float power, float deccelt);
 
     void start();
 
+    void stop();
+
+    bool isOver();
+
     float getPower(float dt);
 
-    void stop();
 };
 
 
