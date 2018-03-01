@@ -9,17 +9,27 @@ int abs(int x) {
     else return -x;
 }
 
-void Machine::setCurrentEnvelop(int command) {
-    if (command == 0)
-        lastEnvelop = &powerEnvelop;
-    else if (abs(command) == 1)
-        lastEnvelop = &rotationEnvelop;
-    else lastEnvelop = &boundEnvelop;
+float Machine::getMotor1Power() const {
+    return motor1Power;
 }
 
-void Machine::getPower(int command, float dt, float *motor1Power, float *motor2Power) {
+float Machine::getMotor2Power() const {
+    return motor2Power;
+}
+
+void Machine::setCurrent(int newCommand) {
+    if (newCommand == 0)
+        currentEnvelop = &powerEnvelop;
+    else if (abs(newCommand) == 1)
+        currentEnvelop = &rotationEnvelop;
+    else currentEnvelop = &boundEnvelop;
+    currentDir = dirs + 3 + newCommand;
+
+}
+
+void Machine::setPower(int command, float dt) {
 
     if (command != currentCommand)
-        lastEnvelop->stop();
+        currentEnvelop->stop();
 
 }

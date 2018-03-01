@@ -22,32 +22,32 @@ Controller::Controller(float emptyLim, float rotateLim, float lightLim, float si
         emptyLim(emptyLim), rotateLim(rotateLim), lightLim(lightLim), sideLim(sideLim),
         distPid(distPid), sidePid(sidePid), light1Pid(light1Pid), light2Pid(light2Pid) {}
 
-int Controller::bound(SensDat4 *lightData, float dt) {
-    float err1 = light1Pid.output(error(lightData->data1, lightData->data2), dt);
-    float err2 = light2Pid.output(error(lightData->data3, lightData->data4), dt);
+int Controller::bound(float dt) {
+    float err1 = light1Pid.output(error(lightData.data1, lightData.data2), dt);
+    float err2 = light2Pid.output(error(lightData.data3, lightData.data4), dt);
     if (err1 > err2) return sgn(err1, lightLim) * 2;
     else return sgn(err2, lightLim) * 3;
 }
 
-int Controller::distance(SensDat4 *distData, SensDat2 *sideData, float dt) {
-    float err1 = error(distData->data1, distData->data3);
-    float err2 = error(distData->data2, distData->data4);
+int Controller::distance(float dt) {
+    float err1 = error(distData.data1, distData.data3);
+    float err2 = error(distData.data2, distData.data4);
     if ((fabsf(err1) + fabsf(err2)) / 2.f > emptyLim) {
-        float output = distPid.output(error(distData->data1, distData->data2, distData->data3, distData->data4), dt);
+        float output = distPid.output(error(distData.data1, distData.data2, distData.data3, distData.data4), dt);
         return sgn(output, rotateLim);
     } else return 2;
 }
 
-int Controller::side(SensDat2 *sideData) {
-    return sgn(error(sideData->data1, sideData->data2), lightLim);
+int Controller::side() {
+    return sgn(error(sideData.data1, sideData.data2), lightLim);
 }
 
-int Controller::getCommand(SensDat4 *distData, SensDat2 *sideData, SensDat4 *lightData, float dt) {
-    int num = bound(lightData, dt);
+int Controller::getCommand(float dt) {
+    int num = bound(dt);
     if (num) return num;
-    num = distance(distData, sideData, dt);
+    num = distance(dt);
     if (num != 2) return num;
-    num = side(sideData);
+    num = side();
     if (num) return num;
     return sgn(distPid.feedback(dt), lightLim);
 }
