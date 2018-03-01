@@ -29,28 +29,26 @@ int Controller::bound(float dt) {
     else return sgn(err2, lightLim) * 3;
 }
 
-int Controller::distance(float dt) {
+int Controller::rotation(float dt) {
     float err1 = error(distData.data1, distData.data3);
     float err2 = error(distData.data2, distData.data4);
     if ((fabsf(err1) + fabsf(err2)) / 2.f > emptyLim) {
-        float output = distPid.output(error(distData.data1, distData.data2, distData.data3, distData.data4), dt);
-        return sgn(output, rotateLim);
+        float err = distPid.output(error(distData.data1, distData.data2, distData.data3, distData.data4), dt);
+        return sgn(err, rotateLim);
     } else return 2;
 }
 
-int Controller::side() {
+int Controller::side(float dt) {
+    float err = sidePid.output(error(sideData.data1, sideData.data2), dt);
     return sgn(error(sideData.data1, sideData.data2), lightLim);
 }
 
 int Controller::getCommand(float dt) {
     int num = bound(dt);
     if (num) return num;
-    num = distance(dt);
+    num = rotation(dt);
     if (num != 2) return num;
     num = side();
     if (num) return num;
     return sgn(distPid.feedback(dt), lightLim);
 }
-
-
-

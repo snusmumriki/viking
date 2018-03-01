@@ -44,9 +44,9 @@ public:
 
     int bound(float dt);
 
-    int distance(float dt);
+    int rotation(float dt);
 
-    int side();
+    int side(float dt);
 };
 
 #endif //VIKING_SCANNER_H

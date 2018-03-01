@@ -22,14 +22,19 @@ void Machine::setCurrent(int newCommand) {
         currentEnvelop = &powerEnvelop;
     else if (abs(newCommand) == 1)
         currentEnvelop = &rotationEnvelop;
-    else currentEnvelop = &boundEnvelop;
+    else
+        currentEnvelop = &boundEnvelop;
     currentDir = dirs + 3 + newCommand;
-
 }
 
-void Machine::setPower(int command, float dt) {
+void Machine::setPower(int newCommand, float dt) {
+    if (newCommand != currentCommand) {
+        if (currentEnvelop->isOver()) {
+            setCurrent(newCommand);
+            currentEnvelop->start();
+        } else currentEnvelop->stop();
+    }
 
-    if (command != currentCommand)
-        currentEnvelop->stop();
-
+    motor1Power = currentDir->motor1Dir * currentEnvelop->getPower(dt);
+    motor2Power = currentDir->motor2Dir * currentEnvelop->getPower(dt);
 }
