@@ -4,9 +4,12 @@
 
 #include "Envelop.h"
 
-Envelop::Envelop(float accelt, float fixedt, float power, float deccelt) :
-        time1(accelt), time2(accelt + fixedt), time3(accelt + fixedt + deccelt),
-        power(power), ka(power / accelt), kd(power / deccelt) {}
+Envelop::Envelop(float accelTime, float fixedTime, float power, float deccelTime) :
+        power(power), ka(power / accelTime), kd(power / deccelTime) {
+    time1 = accelTime;
+    time2 = time1 + fixedTime;
+    time3 = time2 + deccelTime;
+}
 
 void Envelop::start() {
     time = 0.f;
@@ -18,11 +21,15 @@ void Envelop::stop() {
     else time = time3;
 }
 
+bool Envelop::fixedIsOver() {
+    return time > time2;
+}
+
 bool Envelop::isOver() {
     return time >= time3;
 }
 
- float Envelop::getPower(float dt) {
+float Envelop::getPower(float dt) {
     time += dt;
     if (time < time1)
         return time * ka;

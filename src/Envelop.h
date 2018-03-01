@@ -17,16 +17,17 @@ protected:
 
     float time = 0.0;
 public:
-    Envelop(float accelt, float fixedt, float power, float deccelt);
+    Envelop(float accelTime, float fixedTime, float power, float deccelTime);
 
     void start();
 
     void stop();
 
-    bool isOver();
+    virtual bool isOver();
 
-    float getPower(float dt);
+    bool fixedIsOver();
 
+    virtual float getPower(float dt);
 };
 
 

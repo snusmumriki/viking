@@ -11,16 +11,17 @@
 class PowerEnvelop : public Envelop {
 protected:
     float time4;
-    float bpower;
+    float revPower;
     float time5;
-    float kab;
-    float kdb;
+    float revKa;
+    float revKd;
 public:
-    PowerEnvelop(float accelt, float fixedt, float power, float deccelt, float baccelt, float bpower, float bdeccelt);
-
-    float getPower(float dt);
+    PowerEnvelop(float accelTime, float fixedTime, float power, float deccelTime,
+                 float revAccelTime, float revPower, float revDeccelTime);
 
     bool isOver();
+
+    float getPower(float dt);
 };
 
 

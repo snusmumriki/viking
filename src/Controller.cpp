@@ -18,9 +18,9 @@ int sgn(float x, float lim) {
 }
 
 Controller::Controller(float emptyLim, float rotateLim, float lightLim, float sideLim,
-                       const Pid &distPid, const Pid &light1Pid, const Pid &light2Pid) :
+                       const Pid &distPid, const Pid &sidePid, const Pid &light1Pid, const Pid &light2Pid) :
         emptyLim(emptyLim), rotateLim(rotateLim), lightLim(lightLim), sideLim(sideLim),
-        distPid(distPid), light1Pid(light1Pid), light2Pid(light2Pid) {}
+        distPid(distPid), sidePid(sidePid), light1Pid(light1Pid), light2Pid(light2Pid) {}
 
 int Controller::bound(SensDat4 *lightData, float dt) {
     float err1 = light1Pid.output(error(lightData->data1, lightData->data2), dt);
