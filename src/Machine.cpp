@@ -9,6 +9,10 @@ int abs(int x) {
     else return -x;
 }
 
+Machine::Machine(const Envelop &boundEnvelop, const Envelop &rotationEnvelop, const PowerEnvelop &powerEnvelop,
+                 const Controller &controller) : boundEnvelop(boundEnvelop), rotationEnvelop(rotationEnvelop),
+                                                 powerEnvelop(powerEnvelop), controller(controller) {}
+
 float Machine::getMotor1Power() const {
     return motor1Power;
 }
@@ -27,7 +31,8 @@ void Machine::setCurrent(int newCommand) {
     currentDir = dirs + 3 + newCommand;
 }
 
-void Machine::setPower(int newCommand, float dt) {
+void Machine::setPower(float dt) {
+    int newCommand = controller.getCommand(dt);
     if (newCommand != currentCommand) {
         if (currentEnvelop->isOver()) {
             setCurrent(newCommand);

@@ -8,6 +8,7 @@
 
 #include "Envelop.h"
 #include "PowerEnvelop.h"
+#include "Controller.h"
 
 int abs(int x);
 
@@ -32,22 +33,26 @@ MachineDir dirs[8] = {
 
 class Machine {
 private:
+    Envelop boundEnvelop;
+    Envelop rotationEnvelop;
+    PowerEnvelop powerEnvelop;
+    Controller controller;
+
     int currentCommand = 0;
     Envelop *currentEnvelop;
     MachineDir *currentDir;
 
     float motor1Power;
     float motor2Power;
-
-    Envelop boundEnvelop;
-    Envelop rotationEnvelop;
-    PowerEnvelop powerEnvelop;
 public:
+    Machine(const Envelop &boundEnvelop, const Envelop &rotationEnvelop, const PowerEnvelop &powerEnvelop,
+            const Controller &controller);
+
     float getMotor1Power() const;
 
     float getMotor2Power() const;
 
-    void setPower(int newCommand, float dt);
+    void setPower(float dt);
 
     void setCurrent(int newCommand);
 };
