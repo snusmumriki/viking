@@ -40,7 +40,7 @@ int Controller::rotation(float dt) {
 
 int Controller::side(float dt) {
     float err = sidePid.output(error(sideData.data1, sideData.data2), dt);
-    return sgn(error(sideData.data1, sideData.data2), lightLim);
+    return sgn(err, lightLim);
 }
 
 int Controller::getCommand(float dt) {
