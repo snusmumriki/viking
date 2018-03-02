@@ -2,7 +2,7 @@
 // Created by MI on 02/11/2018.
 //
 
-#include <math.h>
+#include <cmath>
 #include "Pid.h"
 
 float normalize(float x) {
