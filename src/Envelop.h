@@ -25,8 +25,6 @@ public:
 
     virtual bool isOver();
 
-    bool fixedIsOver();
-
     virtual float getPower(float dt);
 };
 
