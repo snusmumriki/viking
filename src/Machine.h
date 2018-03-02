@@ -16,14 +16,18 @@ struct MachineDir {
     float motor2Dir;
 };
 
-MachineDir dirs[7] = {
-        {-1.f, 0.f},
+MachineDir dirs[8] = {
         {0.f,  -1.f},
+        {-1.f, 0.f},
+
         {-1.f, 1.f},
         {1.f,  1.f},
         {1.f,  -1.f},
+
         {1.f,  0.f},
         {0.f,  1.f},
+
+        {-1.f, -1.f}
 };
 
 class Machine {
