@@ -2,6 +2,7 @@
 // Created by MI on 02/11/2018.
 //
 
+#include <math.h>
 #include "Pid.h"
 
 float normalize(float x) {
@@ -34,5 +35,5 @@ float Pid::output(float err, float dt) {
 }
 
 float Pid::feedback(float dt) {
-    return normalize(output(i, dt));
+    return normalize(output(copysignf(1.f, i), dt));
 }
