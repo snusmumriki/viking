@@ -25,7 +25,7 @@ private:
     float kp;
     float ki;
     float kd;
-    float sErr;
+    float staticErr;
 
     float err0 = 0.f;
     float i = 0.f;

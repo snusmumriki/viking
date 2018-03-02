@@ -48,7 +48,7 @@ int Controller::getCommand(float dt) {
     if (num) return num;
     num = rotation(dt);
     if (num != 2) return num;
-    num = side();
+    num = side(dt);
     if (num) return num;
     return sgn(distPid.feedback(dt), lightLim);
 }

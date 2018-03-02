@@ -11,7 +11,7 @@ float normalize(float x) {
         return -1.f;
 }
 
-Pid::Pid(float kp, float ki, float kd, float sErr) : kp(kp), ki(ki), kd(kd), sErr(sErr) {}
+Pid::Pid(float kp, float ki, float kd, float sErr) : kp(kp), ki(ki), kd(kd), staticErr(sErr) {}
 
 float Pid::prop(float err) {
     return kp * err;
@@ -28,7 +28,7 @@ float Pid::integral(float err, float dt) {
 }
 
 float Pid::output(float err, float dt) {
-    float pwr = sErr + prop(err) + diff(err, dt) + integral(err, dt);
+    float pwr = staticErr + prop(err) + diff(err, dt) + integral(err, dt);
     err0 = err;
     return pwr;
 }
