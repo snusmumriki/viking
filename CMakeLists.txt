@@ -3,4 +3,4 @@ project(viking)
 
 set(CMAKE_CXX_STANDARD 98)
 
-add_executable(viking src/main.cpp src/Pid.cpp src/Pid.h src/Controller.cpp src/Controller.h src/Envelop.cpp src/Envelop.h src/PowerEnvelop.cpp src/PowerEnvelop.h src/Machine.cpp src/Machine.h)
+add_executable(viking main.cpp Pid.cpp Pid.h Controller.cpp Controller.h Envelop.cpp Envelop.h PowerEnvelop.cpp PowerEnvelop.h Machine.cpp Machine.h)
